@@ -15,7 +15,7 @@ description: Use when designing or restructuring a Minecraft mod's architecture 
 - **依赖方向单一**：公共层不依赖任何加载器；加载器只依赖公共层。
 - **构建复杂度 vs 运行时复杂度的权衡**：多模块构建用"构建期复杂"换"运行时纯净"；单工程+分支用"构建简单"换"维护重复"。
 - **单一事实来源**：版本、依赖、发布元数据只在一处声明，随版本变化的部分版本化。
-- **可组合性优先**：扩展点/注入点选可组合的方案（见 `mixin-development` 技能的"冲突面"原理）。
+- **可组合性优先**：扩展点/注入点选可组合的方案——修改面越窄，与其他模组重叠冲突的风险越低。
 
 ## 真实模式（原理 → 具体例子 → 何时用）
 
@@ -67,17 +67,17 @@ description: Use when designing or restructuring a Minecraft mod's architecture 
 
 - **原理**：mixin 数量上百后，手写配置文件与代码、文档三处失同步；生成让"配置 = 代码上的注解"成为单一来源。
 - **实现**：`@MixinConfigOption`（写在 mixin 包的 `package-info.java` 上）+ 构建期扫描生成 mixins.json。
-- **何时用**：仅当 mixin 数量达到数百级；小项目手写配置文件更简单（见 `mixin-development` 技能）。
+- **何时用**：仅当 mixin 数量达到数百级；小项目手写配置文件更简单。
 
 ### 模式 8：按版本分支 vs 条件编译（Lithium vs Elytra Trims）
 
 - **原理**：差异的"结构"决定工具——结构性大差异（大版本重构）用分支，点状差异（签名、方法名微调）用条件编译。
-- **具体做法**：见 `stonecutter-multiversion` 技能。
+- **具体做法**：条件编译用 Stonecutter——版本差异写在 `//? if <版本> { ... }` 条件块里，构建时按激活版本取舍；结构性大差异仍走分支。
 
 ### 模式 9：发布管线形态（Elytra Trims vs HCsCR）
 
 - **原理**：发布自动化程度应与平台覆盖成正比——平台越多，越值得自动化；只出一个 Release 就不需要插件。
-- **实现**：Elytra Trims = CI 矩阵 + mod-publish-plugin 遍历发布（Modrinth / CurseForge，见 `mod-publish-plugin` 技能）；HCsCR = GitHub Releases + `updater_*.properties`（给 ModMenu 做版本检查）。
+- **实现**：Elytra Trims = CI 矩阵 + mod-publish-plugin 遍历发布（Modrinth / CurseForge）；HCsCR = GitHub Releases + `updater_*.properties`（给 ModMenu 做版本检查）。
 - **何时用**：需要多平台发布 → mod-publish-plugin；只想出 GitHub Release → 简单脚本即可。
 
 ### 模式 10：内置资源包（Continuity）
@@ -101,8 +101,8 @@ description: Use when designing or restructuring a Minecraft mod's architecture 
 | 情况                       | 推荐                                                                                       |
 | -------------------------- | ------------------------------------------------------------------------------------------ |
 | 单加载器、中小型           | 单工程，入口薄壳，包结构按依赖方向分层                                                     |
-| 多加载器、共享代码多       | 多模块（Xplat + ServiceLoader）或 Stonecutter + modstitch（见 `stonecutter-multiversion`） |
+| 多加载器、共享代码多               | 多模块（Xplat + ServiceLoader）或 Stonecutter + modstitch                                      |
 | 多加载器、各加载器独立演进 | 单工程 + 分支                                                                              |
 | Fabric 优先、NeoForge 附带 | Fabric 源码 + Connector 双元数据                                                           |
 | mixin 上百个               | 配置生成（`@MixinConfigOption`）                                                           |
-| 多平台发布                 | mod-publish-plugin（见 `mod-publish-plugin`）                                              |
+| 多平台发布                    | mod-publish-plugin                                                                       |
