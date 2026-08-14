@@ -20,11 +20,11 @@
 
 ### 方式一：直接复制
 
-把本仓库的 `agent-presets/` 目录复制到你的 DSH 用户预设目录：
+把本仓库 `agent-presets/` 下的内容复制到你的 DSH 用户预设目录下的 `minecraft-dev/`：
 
 ```sh
-mkdir -p ~/.dsh/.agent-presets
-cp -r agent-presets/minecraft-dev ~/.dsh/.agent-presets/
+mkdir -p ~/.dsh/.agent-presets/minecraft-dev
+cp -r agent-presets/. ~/.dsh/.agent-presets/minecraft-dev/
 ```
 
 然后在 DSH Web 界面新建会话，选择 **Minecraft 模组开发** 预设。
@@ -33,7 +33,8 @@ cp -r agent-presets/minecraft-dev ~/.dsh/.agent-presets/
 
 ```sh
 git clone https://github.com/Leawind/dsh-minecraft-dev.git
-cp -r dsh-minecraft-dev/agent-presets/minecraft-dev ~/.dsh/.agent-presets/
+mkdir -p ~/.dsh/.agent-presets/minecraft-dev
+cp -r dsh-minecraft-dev/agent-presets/. ~/.dsh/.agent-presets/minecraft-dev/
 ```
 
 ## 使用

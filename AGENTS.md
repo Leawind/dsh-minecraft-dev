@@ -5,7 +5,7 @@
 ## 目录结构
 
 ```
-agent-presets/minecraft-dev/        # 预设本体（唯一需要维护的内容）
+agent-presets/                      # 预设本体（唯一需要维护的内容）
 ├── agent.cordis.yml                # 组合文件：persona + 工具行 + 技能目录配置
 ├── preset.yml                      # 元数据：name / description
 └── skills/                         # 按需加载的技能手册
@@ -49,15 +49,15 @@ agent-presets/minecraft-dev/        # 预设本体（唯一需要维护的内容
 
 ## 修改流程
 
-1. 编辑仓库中的 `agent-presets/minecraft-dev/`（仓库是权威源）
-2. 同步到本机安装版：`cp -r agent-presets/minecraft-dev/. ~/.dsh/.agent-presets/minecraft-dev/`
+1. 编辑仓库中的 `agent-presets/`（仓库是权威源）
+2. 同步到本机安装版：`cp -r agent-presets/. ~/.dsh/.agent-presets/minecraft-dev/`
 3. **必须验证**：通过动态插件调用 `agentPresets.standingKeyFor('minecraft-dev')`，确认组合可加载（若无效会抛出 Cannot find package / invalid config / did not activate 等错误）
 4. 提交（见提交规范）
 
 ## 同步与分发
 
 - 发布渠道：GitHub 仓库 + `dsh-plugin` topic
-- 使用方式：用户把 `agent-presets/minecraft-dev` 复制到自己的 `~/.dsh/.agent-presets/`，新建会话选择"Minecraft 模组开发"预设
+- 使用方式：用户把 `agent-presets/` 下的内容复制到自己的 `~/.dsh/.agent-presets/minecraft-dev/`，新建会话选择"Minecraft 模组开发"预设
 
 ## 提交规范
 
