@@ -10,7 +10,7 @@
 - **技能手册**（按需加载）：
   | 技能                         | 用途                                                                               |
   | ---------------------------- | ---------------------------------------------------------------------------------- |
-  | `mod-ecosystem-overview`    | 模组开发生态速览：加载器选择、发布平台、CI 发布、文档发布、多版本方案对比                                            |
+  | `mod-ecosystem-overview`    | 模组开发生态速览：加载器选择、发布平台、CI 发布、文档发布、源码管理与许可证                                           |
   | `stonecutter-multiversion`   | Stonecutter 多版本开发：条件编译写法、版本切换、多版本构建                         |
   | `mixin-development`          | Mixin 开发：注入点选择、兼容性安全实践、崩溃修复                                   |
   | `mod-publish-plugin`         | 使用 mod-publish-plugin 发布到 Modrinth / CurseForge：插件配置、发布流程、故障排查 |
