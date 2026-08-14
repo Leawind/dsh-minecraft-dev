@@ -46,6 +46,7 @@ agent-presets/minecraft-dev/        # 预设本体（唯一需要维护的内容
 - 每个技能一个目录，目录名 = 技能名
 - 文件为 `SKILL.md`，带 YAML frontmatter：`name` + `description`
 - `description` 以 "Use when..." 开头，说明何时加载该技能
+- 技能必须自包含、可独立存在：不引用其他技能（不出现"见 X 技能"这类指向），所需上下文全部写在自身内容里
 - 技术事实（枚举值、版本号、API 行为）以官方源码为准，不凭记忆编写
 - 可以附上相关源码仓库或官方文档的URL
 
