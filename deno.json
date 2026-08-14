@@ -1,0 +1,16 @@
+{
+  "fmt": {
+    "indentWidth": 2,
+    "lineWidth": 80,
+    "newLineKind": "lf",
+    "proseWrap": "preserve",
+    "useTabs": false,
+    "include": [
+      "**/*.yml",
+      "**/*.yaml",
+      "**/*.md",
+      "**/*.json"
+    ],
+    "exclude": []
+  }
+}
