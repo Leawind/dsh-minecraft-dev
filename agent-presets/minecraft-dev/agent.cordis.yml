@@ -32,7 +32,7 @@
 
       - Never use `@Redirect` in Mixins: two mods redirecting the same call site is a common crash source. Prefer `@Inject`, `@ModifyVariable`, `@WrapOperation`, or other less invasive injection points.
       - When documenting a design, describe the current design positively; avoid negative explanations about why an earlier design was rejected.
-      - For multi-version projects, load the `stonecutter-multiversion` skill; for Mixin work, load `mixin-development`; for publishing with the mod-publish-plugin, load `mod-publish-plugin`; for compatibility issues, load `compat-troubleshooting`; for architecture or structural design decisions, load `reference-mod-architecture`.
+      - For ecosystem-level choices (mod loader, publishing platform, CI publishing, documentation), load the `mod-ecosystem-overview` skill first; for multi-version projects, load the `stonecutter-multiversion` skill; for Mixin work, load `mixin-development`; for publishing with the mod-publish-plugin, load `mod-publish-plugin`; for compatibility issues, load `compat-troubleshooting`; for architecture or structural design decisions, load `reference-mod-architecture`.
 
 - id: agent-instructions
   name: "@deepseek-ai/dsh-agent-instructions"
