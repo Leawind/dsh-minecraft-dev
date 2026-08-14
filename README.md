@@ -2,11 +2,11 @@
 
 一个面向 Minecraft 模组开发的 [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) Agent 预设。
 
-在 DSH 中新建会话时选择 **Minecraft 模组开发** 预设，代理就会自动获得模组开发的最佳实践指引，并附带多版本开发、Mixin 规范、模组发布、兼容性排查四项技能。
+在 DSH 中新建会话时选择 **Minecraft 模组开发** 预设，代理会获得模组开发实践约定，并可按需加载多版本开发、Mixin 规范、模组发布、兼容性排查等技能。
 
 ## 功能
 
-- **知识注入**：persona 内置核心规则（Mixin 禁用 `@Redirect`、文档正面描述、技能加载指引）
+- **知识注入**：persona 注入作者的经验约定（Mixin 禁用 `@Redirect`、文档正面描述、技能加载指引）
 - **技能手册**（按需加载）：
   | 技能                         | 用途                                                                               |
   | ---------------------------- | ---------------------------------------------------------------------------------- |
@@ -14,7 +14,7 @@
   | `mixin-development`          | Mixin 开发：注入点选择、兼容性安全实践、崩溃修复                                   |
   | `mod-publish-plugin`         | 使用 mod-publish-plugin 发布到 Modrinth / CurseForge：插件配置、发布流程、故障排查 |
   | `compat-troubleshooting`     | 模组兼容性排查：查看参考模组源码、定位冲突点、验证修复                             |
-  | `reference-mod-architecture` | 参考优秀模组架构设计：多加载器/模块划分/跨平台抽象等模式的原理、实例与选型         |
+  | `reference-mod-architecture` | 参考开源模组架构设计：多加载器/模块划分/跨平台抽象等模式的原理、实例与选型         |
 
 ## 安装
 
@@ -34,7 +34,7 @@ cp -r dsh-minecraft-dev/agent-presets/minecraft-dev ~/.dsh/.agent-presets/
 
 ## 自定义
 
-预设基于 DSH 的 `standard` 预设派生（完整的编码代理能力）。如需调整：
+预设基于 DSH 的 `standard` 预设派生（继承其工具链）。如需调整：
 
 1. 编辑 `~/.dsh/.agent-presets/minecraft-dev/agent.cordis.yml` 中的 persona 段落
 2. 在 `skills/` 下增删技能目录（每个技能是一个目录 + 一份 `SKILL.md`）
