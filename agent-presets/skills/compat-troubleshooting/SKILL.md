@@ -5,7 +5,7 @@ description: Use when diagnosing a Minecraft mod compatibility problem — a cra
 
 # 模组兼容性排查
 
-模组兼容性问题通常只在多个模组共存时出现，单模组测试无法复现。排查的核心是**缩小范围、对照源码、定位冲突点**。以下排查手段来自 Lithium、Fabric API、Immersive Portals 等开源模组的实际做法（见 `docs/References.md`）。
+模组兼容性问题通常只在多个模组共存时出现，单模组测试无法复现。排查的核心是**缩小范围、对照源码、定位冲突点**。排查手段以"冲突的产生机制"为纲（多个模组对同一目标的重叠修改），文中提到的开源模组（Lithium、Immersive Portals 等，见 `docs/References.md`）是印证实例，不是规则来源。
 
 ## 排查流程
 
@@ -28,7 +28,7 @@ description: Use when diagnosing a Minecraft mod compatibility problem — a cra
   - **注入顺序**由 `@Mixin(priority = N)` 决定——对方模组用高 priority（如 IP 的 `900`）压过你的注入时，先挂的注入可能被覆盖。
   - **注入点静默失效**：先查双方 mixin 配置的 `injectors.defaultRequire`（`1` 时不匹配会直接报错；`0` 时不匹配静默跳过，问题更隐蔽）。给 run 配置加 `-Dmixin.debug.export=true`（Elytra Trims 的做法）可导出反编译的目标方法，核对双方锚点。
   - **MixinExtras**（`@WrapOperation` / `@ModifyExpressionValue`）由 Fabric Loader 内置提供：双方都用 MixinExtras 包装同一调用点时通常能共存，比双 `@Redirect` 安全得多；但一方 MixinExtras、一方原生 `@Redirect` 时仍可能冲突。
-  - **运行时禁用冲突 Mixin**：IP 的做法是 `IMixinConfigPlugin.shouldApplyMixin` 里检查 `isModLoaded("porting_lib")`，检测到对方 mod 时返回 `false` 跳过冲突 Mixin。
+  - **运行时禁用冲突 Mixin**：原理是"失败关闭式兼容"——与其在运行时与对方模组的行为冲突，不如在加载期检测到对方后跳过自己的冲突注入。做法：`IMixinConfigPlugin.shouldApplyMixin` 里检查 `isModLoaded("porting_lib")`，冲突时返回 `false`（IP 的实例）。
 - **事件**：双方是否监听同一事件且都改动同一状态。
 - **资源/模型/渲染**：双方是否覆盖同一资源路径或模型。
 - **网络包**：双方是否注册了同 ID 的数据包。

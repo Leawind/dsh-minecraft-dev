@@ -5,7 +5,7 @@ description: Use when working on a Minecraft mod that supports multiple Minecraf
 
 # Stonecutter 多版本开发
 
-Stonecutter 是一个 Gradle 插件，用一套源码为多个 Minecraft 版本生成构建产物。同一份代码中，版本差异通过条件编译块表达，构建时按目标版本切换。以下写法来自 Elytra Trims（Stonecutter 作者 kikugie 的模组）、YACL、HCsCR 的实际配置，可对照参考（见 `docs/References.md`）。
+Stonecutter 是一个 Gradle 插件，用一套源码为多个 Minecraft 版本生成构建产物。同一份代码中，版本差异通过条件编译块表达，构建时按目标版本切换。本文描述的是 Stonecutter 的实际行为——语法与配置形态是工具本身的规则，不以某项目为准；Elytra Trims（Stonecutter 作者 kikugie 的模组）、YACL、HCsCR 等真实项目（见 `docs/References.md`）用于验证各版本的实际写法。
 
 ## 先弄清楚项目结构
 

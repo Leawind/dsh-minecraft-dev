@@ -5,7 +5,7 @@ description: Use when publishing a Minecraft mod to Modrinth or CurseForge via t
 
 # mod-publish-plugin 模组发布
 
-本文介绍使用 `me.modmuss50.mod-publish-plugin` 这个 Gradle 插件发布 Minecraft 模组的方法。它有自动解析依赖、选择平台、上传产物等能力。配置范例参考 Elytra Trims、YACL 的实际项目（见 `docs/References.md`）。
+本文介绍使用 `me.modmuss50.mod-publish-plugin` 这个 Gradle 插件发布 Minecraft 模组的方法。它有自动解析依赖、选择平台、上传产物等能力。规则以插件 DSL 与平台（Modrinth / CurseForge）的实际行为为准，Elytra Trims、YACL 等真实项目（见 `docs/References.md`）用于验证写法。
 
 ## 版本要求
 
