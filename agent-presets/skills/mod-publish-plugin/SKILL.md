@@ -17,7 +17,7 @@ plugins {
 }
 ```
 
-**注意 DSL 随大版本变化**：2.x 用 `publishMods { }` 顶层块（内嵌 `modrinth { }` / `curseforge { }`）；0.x / 1.x 用顶层 `modrinth { }` / `curseforge { }` 块（YACL 的 0.8.4 仍是旧写法）。先确认项目用的插件版本再决定写法。
+**注意 DSL 随大版本变化**：2.x 用 `publishMods { }` 顶层块（内嵌 `modrinth { }` / `curseforge { }`）；0.x / 1.x 用顶层 `modrinth { }` / `curseforge { }` 块（实测 Elytra Trims 3.x 用 `1.0.+`、YACL lts 用 `0.8.4`，都是旧写法）。先确认项目用的插件版本再决定写法。
 
 ## 配置要点（2.x 写法）
 
@@ -54,7 +54,7 @@ publishMods {
 - `modrinth` / `curseforge` 块的 API Token 通过环境变量提供（`MODRINTH_TOKEN`、`CURSEFORGE_TOKEN`），**不要把 Token 写进仓库**；`dryRun` 在 token 缺失时自动开启可避免误上传。
 - `type`：alpha / beta / release 三选一，与项目的版本阶段对应。
 - `depends` / `requires` / `conflicts`：声明模组依赖与冲突，发布后平台会自动展示。
-- `minecraftVersions`：单版本项目写死即可；Stonecutter 项目用版本属性（如 `sc.properties.raw("mod:releases")`）动态取，并可在 `stonecutter.gradle.kts` 里给发布 task 排序：`stonecutter tasks { order("publishModrinth", ordering) }`（Elytra Trims 按版本号 + 加载器排序）。
+- `minecraftVersions`：单版本项目写死即可；Stonecutter 项目从版本化属性动态取。实测三种来源：版本化 gradle.properties 的 `mod.mc_targets`（空格分隔，Elytra Trims 3.x）、toml 的 `mod.releases`（`sc.properties.raw("mod:releases").to<List<String>>()`，Elytra Trims 4.x）、gradle.properties 的 `pub.stableMC` / `pub.modrinthMC`（逗号分隔，YACL）。并可在 `stonecutter.gradle.kts` 里给发布 task 排序：`stonecutter tasks { order("publishModrinth", ordering) }`（Elytra Trims 按版本号 + 加载器排序）。
 - `modrinth` 块应配置 `environment`，声明模组运行在客户端还是服务端（如客户端专用模组用 `CLIENT_ONLY`），见下方可选值。
 - 发布用的产物文件用 loom 的 `remapJar` 或 `modJar`（已重映射的 jar），不要传原始构建产物。
 

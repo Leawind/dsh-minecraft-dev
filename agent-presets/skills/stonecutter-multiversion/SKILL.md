@@ -9,7 +9,9 @@ Stonecutter 是一个 Gradle 插件，用一套源码为多个 Minecraft 版本�
 
 ## 先弄清楚项目结构
 
-1. 读 `settings.gradle.kts` 和 `stonecutter.gradle.kts`，确认 Stonecutter 插件版本与激活方式：
+1. 读 `settings.gradle.kts` 和 `stonecutter.gradle.kts`，确认 Stonecutter 插件版本与激活方式。插件 id 恒为 `dev.kikugie.stonecutter`，实测版本：0.8.2（YACL lts）、0.9.2（Elytra Trims 3.x）、0.9.7（Elytra Trims 4.x、HCsCR）：
+   - 0.8–0.9.2 时代：`kotlinController = true` + `centralScript = "build.gradle.kts"`，版本内嵌在 settings 的 `shared { ... }` 里。
+   - 0.9.7 时代：可用 `stonecutter active "<版本>-<加载器>"` 或 `active file(...)`，版本清单外置（见下）。
    - 直接指定：`stonecutter active "26.3-fabric"`（HCsCR、Elytra Trims 4.x）。
    - 指向文件：`stonecutter active file("versions/current")`（YACL，`versions/current` 里写当前版本名）。
 2. 版本矩阵的存放位置随 Stonecutter 版本而变，**不要假设存在 `versions.properties`（已过时）**，按实际情况找：
@@ -43,6 +45,9 @@ public class NeoforgeEntrypoint { ... }
 ```
 
 - 比较条件形如 `if >=1.21.11`、`if <1.20.2`、`if fabric`（加载器常量，配合 `stonecutter parameters { constants { match(loader, "fabric", "neoforge") } }`）。
+- **单行选择器**：`/*? if <=1.20.4*/getOrThrow(false) {}` + `/*? if >1.20.4*//*orThrow*/`——非当前分支的代码放在注释里（Elytra Trims 的 Util.kt 范例）。
+- **多分支**：`//?} elif <1.20.6 {` 链式判断（HCsCR）。
+- **文本替换块**（HCsCR）：`//~ if <条件> '原文' -> '替换' { ... //~}` 在源码里直接做文本替换。
 - 嵌套时，符合当前条件的代码仍用 `/* */`，被注释的其他版本代码用 `/^ ^/` 表示内层条件（参考项目自身的既有写法，保持一致）。
 - 需要 else / else-if 时，尽量用 `>=` 条件，不要用 `<` 或 `<=`。
 - 方法体中出现条件编译且需要注释说明原因时，把原因写在该方法的 Javadoc 中，不要写在方法体里。
@@ -66,12 +71,13 @@ public class NeoforgeEntrypoint { ... }
 Stonecutter 只处理版本差异；加载器差异（Fabric/NeoForge 元数据、入口）用 **modstitch** 配合：
 
 - 每个版本目录的 `gradle.properties` 里写 `modstitch.platform=fabric-loom-remap`（或 neoforge 对应值），modstitch 据此生成对应加载器的 loom 配置（YACL 的做法）。
-- **`modstitch.ct` 是加载器无关的 class tweaker**，格式为 `accessWidener v1 named` + `accessible class ...` / `extendable method ...`（YACL 的 modstitch.ct 是真实范例）。modstitch 自动发现它并转成对应加载器的 Access Widener。
+- **`modstitch.ct` 是加载器无关的 class tweaker**，格式为 `accessWidener v1 named` + `accessible class ...` / `extendable method ...`（YACL 的 modstitch.ct 是真实范例）。modstitch 按 `modstitch.ct → .classTweaker → accesstransformer.cfg` 顺序在项目链中自动查找，转换后设置 `loom.accessWidenerPath`，构建脚本里无需声明。
 - 不用 modstitch 时，Elytra Trims 直接在 loom 里处理：`loom { accessWidenerPath = sc.process(file("...classtweaker"), "build/processed/...") }`。
 
 ## 切换版本与构建
 
 - 切换激活版本前，先读项目的 AGENTS.md 或文档确认命令（常见为直接改 `stonecutter.gradle.kts` / `versions/current`，或 `./gradlew` 的 stonecutter 相关 task）。
+- **CI 按实例激活**：Elytra Trims 的 CI 用 jq 从 `versions.json` 生成矩阵，设置 `MATRIX_INSTANCE` / `MATRIX_VERSION` 环境变量后，settings 里 `version(matrix, version)` 按实例激活，逐项目 `./gradlew :<项目>:build`。
 - 多版本全量构建通常很慢：用后台任务运行，例如 `./gradlew buildAndCollect`（项目定义了该 task 时，Elytra Trims 用它收集各版本产物），不要阻塞对话。
 - 只构建当前版本时用普通 `./gradlew build`。
 - 构建前先运行项目的架构/格式检查任务（如 `checkArchitecture`）——多版本项目常把它挂进 `check`。
