@@ -67,21 +67,21 @@ Stonecutter 作者 kikugie 自己的模组，Stonecutter 0.9.7 + `versions.json`
 - Modrinth：<https://modrinth.com/mod/botania>
 - 源码：<https://github.com/VazkiiMods/Botania>
 
-Xplat + Fabric + Forge 三模块结构：Xplat 存公共代码并直接编入各加载器 jar，跨平台抽象用 Java ServiceLoader，代码组织公认优秀。
+Xplat + Fabric + Forge 三模块结构：Xplat 存 Mojmap 公共代码并直接编入各加载器 jar（`compileOnly` + `source(Xplat.sourceSets...)`），跨平台抽象用 Java ServiceLoader（`ServiceUtil.findService` + 各模块 `META-INF/services/` 注册实现），跨平台 mixin 集中在 Xplat，代码组织公认优秀。
 
 ### Applied Energistics 2
 
 - Modrinth：<https://modrinth.com/mod/ae2>
 - 源码：<https://github.com/AppliedEnergistics/Applied-Energistics-2>
 
-单 Gradle 工程，多加载器靠同仓库独立分支/发布线（fabric / forge tag 并存），main 分支的 buildSrc 放构建插件，复杂事件/网络/渲染体系参考。
+单 Gradle 工程，多加载器靠同仓库独立分支/发布线（fabric / forge tag 并存），main 分支的 buildSrc 放构建插件（ProjectDefaultsPlugin 等），单工程内用 sourceSet（main/client/test/buildtools）拆代码，加载器入口是薄壳（Fabric 端 `AppEngServerStartup` 只 `new AppEngServer()`），Fabric 分支用 portaforgy source set 提供 `net.minecraftforge.*` 形状的 datagen 类。
 
 ### Create
 
 - Modrinth：<https://modrinth.com/mod/create>
 - 源码：<https://github.com/Creators-of-Create/Create>
 
-单工程维护，入口统一为 `Create` / `CreateClient`，公共/平台边界靠包结构（content/foundation/infrastructure），多加载器支持靠独立分支或仓库。
+单工程维护，入口统一为 `Create`（@Mod）/ `CreateClient`（@Mod dist=CLIENT），公共/平台边界靠包结构（content/foundation/infrastructure），mods.toml 用 `src/main/templates` 模板 + `generateModMetadata` 生成，`includeBuild("Ponder")` 复合构建，Fabric 版是独立移植不在本仓库。
 
 ### Sodium
 
@@ -95,4 +95,4 @@ Xplat + Fabric + Forge 三模块结构：Xplat 存公共代码并直接编入各
 - Modrinth：<https://modrinth.com/mod/continuity>
 - 源码：<https://github.com/PepperCode1/Continuity>
 
-资源包/模型加载参考（Fabric API ResourceLoader + 模型修饰器）；NeoForge 版靠同一套 Fabric 源码 + Sinytra Connector 双元数据运行，与兼容性排查相关。
+资源包/模型加载参考：Fabric API ResourceLoader 注册重载器与内置资源包（`registerBuiltinPack`，包体在 `src/main/resources/resourcepacks/`），`PreparableModelLoadingPlugin` + `ModelModifier.WRAP_LAST_PHASE` 在 bake 后包裹模型；NeoForge 版靠同一套 Fabric 源码 + Sinytra Connector 双元数据运行，与兼容性排查相关。
