@@ -25,7 +25,7 @@
 - id: persona
   name: "@deepseek-ai/dsh-persona"
   config:
-    text: |-
+    prefix: |-
       You are a coding agent powered by the {{model}} model, specialized in Minecraft mod development. Your working directory is {{cwd}}.
 
       ## Minecraft mod development rules
@@ -100,12 +100,15 @@
 
 # ── goals ───────────────────────────────────────────────────────────────────
 
-# Only the model-facing tool. The goal SERVICE, its session driver, and the
-# `/goal` command stay on the host plane: the Gateway serves the goal domain as
-# Remote endpoints whose receiver comes from a generated descriptor, so it
-# resolves `goals` on the host and an entry-local realm here would hide it. The
-# registry is keyed by session anyway, so one host instance serves every
-# session. What a preset chooses is whether its agent can call the goal tool.
+# The goal SERVICE and its session driver stay on the host plane: the Gateway
+# serves the goal domain as Remote endpoints whose receiver comes from a
+# generated descriptor, so it resolves `goals` on the host and an entry-local
+# realm here would hide it. The registry is keyed by session anyway, so one host
+# instance serves every session. The human command and the model-facing tool
+# register into THIS preset's scoped layers, which is what a preset chooses.
+- id: command-goal
+  name: "@deepseek-ai/dsh-command-goal"
+
 - id: tool-goal
   name: "@deepseek-ai/dsh-tool-goal"
 
@@ -200,6 +203,7 @@
       config:
         provider: spawn
         toolName: subagent
+        modelSelectionSettings: true
         backgroundMode: continuable
 
     - id: tool-subagent-fork
@@ -261,3 +265,6 @@
   config:
     fetch: false
     searchTimeoutMs: 60000
+
+- id: present
+  name: "@deepseek-ai/dsh-tool-present"
